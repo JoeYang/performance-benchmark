@@ -8,7 +8,9 @@
 #include <thread>
 
 #ifdef __linux__
+#ifdef HAVE_NUMA
 #include <numa.h>
+#endif
 #include <sched.h>
 #include <sys/mman.h>
 #include <sys/resource.h>
@@ -56,6 +58,7 @@ SystemInfo get_system_info() {
     }
 
     // NUMA info
+#ifdef HAVE_NUMA
     if (numa_available() >= 0) {
         info.num_numa_nodes = numa_max_node() + 1;
         info.numa_cpu_map.resize(info.num_numa_nodes);
@@ -72,6 +75,7 @@ SystemInfo get_system_info() {
             numa_free_cpumask(cpumask);
         }
     }
+#endif
 #endif
 
 #ifdef __APPLE__
@@ -132,7 +136,7 @@ bool set_thread_affinity(int start_cpu, int num_cpus) {
 }
 
 bool bind_numa_node(int node) {
-#ifdef __linux__
+#if defined(__linux__) && defined(HAVE_NUMA)
     if (numa_available() < 0) return false;
     if (node < 0 || node > numa_max_node()) return false;
 

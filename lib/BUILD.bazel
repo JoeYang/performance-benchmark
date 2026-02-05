@@ -1,3 +1,5 @@
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+
 cc_library(
     name = "math",
     srcs = ["math.cc"],
@@ -43,13 +45,22 @@ cc_library(
     deps = [":position"],
 )
 
+config_setting(
+    name = "enable_numa",
+    values = {"define": "numa=1"},
+)
+
 cc_library(
     name = "system",
     srcs = ["system.cc"],
     hdrs = ["system.h"],
     visibility = ["//visibility:public"],
+    local_defines = select({
+        ":enable_numa": ["HAVE_NUMA"],
+        "//conditions:default": [],
+    }),
     linkopts = select({
-        "@platforms//os:linux": ["-lnuma"],
+        ":enable_numa": ["-lnuma"],
         "//conditions:default": [],
     }),
 )
