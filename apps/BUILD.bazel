@@ -1,0 +1,18 @@
+cc_binary(
+    name = "calculator",
+    srcs = ["calculator.cc"],
+    deps = ["//lib:math"],
+)
+
+cc_binary(
+    name = "risk_benchmark",
+    srcs = ["risk_benchmark.cc"],
+    deps = [
+        "//lib:aggregator",
+        "//lib:benchmark",
+        "//lib:greeks",
+        "//lib:monte_carlo",
+        "//lib:position",
+        "//lib:system",
+    ],
+)

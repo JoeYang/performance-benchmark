@@ -1,0 +1,94 @@
+cc_library(
+    name = "math",
+    srcs = ["math.cc"],
+    hdrs = ["math.h"],
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "position",
+    srcs = ["position.cc"],
+    hdrs = ["position.h"],
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "benchmark",
+    srcs = ["benchmark.cc"],
+    hdrs = ["benchmark.h"],
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "greeks",
+    srcs = ["greeks.cc"],
+    hdrs = ["greeks.h"],
+    visibility = ["//visibility:public"],
+    deps = [":position"],
+)
+
+cc_library(
+    name = "monte_carlo",
+    srcs = ["monte_carlo.cc"],
+    hdrs = ["monte_carlo.h"],
+    visibility = ["//visibility:public"],
+    deps = [":position"],
+)
+
+cc_library(
+    name = "aggregator",
+    srcs = ["aggregator.cc"],
+    hdrs = ["aggregator.h"],
+    visibility = ["//visibility:public"],
+    deps = [":position"],
+)
+
+cc_library(
+    name = "system",
+    srcs = ["system.cc"],
+    hdrs = ["system.h"],
+    visibility = ["//visibility:public"],
+    linkopts = select({
+        "@platforms//os:linux": ["-lnuma"],
+        "//conditions:default": [],
+    }),
+)
+
+cc_test(
+    name = "math_test",
+    srcs = ["math_test.cc"],
+    deps = [
+        ":math",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "greeks_test",
+    srcs = ["greeks_test.cc"],
+    deps = [
+        ":greeks",
+        ":position",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "monte_carlo_test",
+    srcs = ["monte_carlo_test.cc"],
+    deps = [
+        ":monte_carlo",
+        ":position",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "aggregator_test",
+    srcs = ["aggregator_test.cc"],
+    deps = [
+        ":aggregator",
+        ":position",
+        "@googletest//:gtest_main",
+    ],
+)

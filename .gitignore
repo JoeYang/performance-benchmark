@@ -1,0 +1,26 @@
+# Build directories
+build/
+bazel-*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Compiled files
+*.o
+*.a
+*.so
+*.dylib
+
+# Package files
+*.tar.gz
+*.zip
+*.deb
+*.rpm
+
+# OS files
+.DS_Store
+Thumbs.db
